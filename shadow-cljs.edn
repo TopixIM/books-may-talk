@@ -3,23 +3,23 @@
                 "clojars" {:url "https://mirrors.ustc.edu.cn/clojars/"}}
  :source-paths ["src" "cli"]
  :dependencies [[mvc-works/hsl          "0.1.2"]
-                [mvc-works/verbosely    "0.1.2"]
-                [mvc-works/shell-page   "0.1.8"]
-                [cumulo/recollect       "0.4.3"]
-                [respo                  "0.8.20"]
-                [respo/ui               "0.3.7"]
-                [respo/alerts           "0.3.6"]
-                [respo/message          "0.3.3"]
+                [mvc-works/shell-page   "0.1.9"]
+                [cumulo/recollect       "0.5.0"]
+                [cumulo/reel            "0.1.0"]
+                [respo                  "0.10.2"]
+                [respo/ui               "0.3.10"]
+                [respo/alerts           "0.3.10"]
+                [respo/message          "0.3.4"]
+                [respo/feather          "0.1.1"]
                 [cirru/bisection-key    "0.1.5"]]
  :open-file-command ["subl" ["%s:%s:%s" :file :line :column]]
  :builds {:client {:output-dir "target/"
                    :asset-path "./"
                    :target :browser
-                   :modules {:client {:entries [app.client]}}
+                   :modules {:client {:init-fn app.client/main!}}
                    :devtools {:after-load app.client/reload!
                               :http-root "target"
-                              :http-port 7000
-                              :loader-mode :eval}
+                              :http-port 7000}
                    :release {:output-dir "dist/"}
                              :module-hash-names 8
                              :build-options {:manifest-name "assets.edn"}}

@@ -1,24 +1,37 @@
 
 (ns app.schema )
 
-(def book {:id nil, :name nil, :author-name nil, :notes-amount 0, :sections {}})
+(def section {:id nil, :text nil, :notes-index []})
 
-(def database {:sessions {}, :users {}, :books {}})
+(def book
+  {:id nil,
+   :name nil,
+   :author-name nil,
+   :avatar nil,
+   :notes-amount 0,
+   :sections (do section {})})
 
-(def note {:id nil, :text nil, :time nil, :author-id nil})
+(def mark {:book-id nil, :section-id nil, :section-idx nil, :time nil})
 
-(def notification {:id nil, :kind nil, :text nil})
+(def note {:id nil, :book-id nil, :section-id nil, :text nil, :time nil, :author-id nil})
 
 (def router {:name nil, :title nil, :data {}, :router nil})
-
-(def section {:id nil, :text nil, :notes #{}})
 
 (def session
   {:user-id nil,
    :id nil,
    :nickname nil,
-   :router {:name :home, :data nil, :router nil},
+   :router (do router {:name :home, :data nil, :router nil}),
    :messages {}})
 
 (def user
-  {:name nil, :id nil, :nickname nil, :avatar nil, :password nil, :notes {}, :marks {}})
+  {:name nil,
+   :id nil,
+   :nickname nil,
+   :avatar nil,
+   :password nil,
+   :notes-index [],
+   :marks (do mark {})})
+
+(def database
+  {:sessions (do session {}), :users (do user {}), :books (do book {}), :notes (do note {})})
