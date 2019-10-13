@@ -63,7 +63,7 @@
       (comp-navigation (:logged-in? store) (:count store))
       (if (:logged-in? store)
         (case (:name router)
-          :home (<> "Nothing")
+          :home (<> "Home")
           :profile (comp-profile (:user store) (:data router))
           (<> router))
         (comp-login states))
@@ -74,5 +74,3 @@
        {}
        (fn [info d! m!] (d! :session/remove-message info)))
       (when dev? (comp-reel (:reel-length store) {}))))))
-
-(def style-body {:padding "8px 16px"})

@@ -5,4 +5,5 @@
 .shadow-cljs/
 .cpcache/
 .nrepl-port
-/data/
+
+/data
