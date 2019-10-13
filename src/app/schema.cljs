@@ -1,5 +1,5 @@
 
-(ns app.schema )
+(ns app.schema (:require [clojure.string :as string]))
 
 (def router {:name nil, :title nil, :data {}, :router nil})
 
@@ -12,4 +12,5 @@
 
 (def user {:name nil, :id nil, :nickname nil, :avatar nil, :password nil})
 
-(def database {:sessions (do session {}), :users (do user {})})
+(def database
+  {:sessions (do session {}), :users (do user {}), :books {"cicero" {:title nil}}})
