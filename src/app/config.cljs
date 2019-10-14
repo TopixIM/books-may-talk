@@ -18,7 +18,7 @@
 
 (def site
   {:port 11013,
-   :title "TopixIM",
+   :title "BooksMayTalk",
    :icon "http://cdn.tiye.me/logo/cumulo.png",
    :dev-ui "http://localhost:8100/main.css",
    :release-ui "http://cdn.tiye.me/favored-fonts/main.css",

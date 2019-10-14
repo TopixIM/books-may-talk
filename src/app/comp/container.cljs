@@ -13,7 +13,8 @@
             [app.config :refer [dev?]]
             [app.schema :as schema]
             [app.config :as config]
-            [app.comp.home :refer [comp-home]]))
+            [app.comp.home :refer [comp-home]]
+            [app.comp.reading-room :refer [comp-reading-room]]))
 
 (defcomp
  comp-offline
@@ -64,8 +65,9 @@
       (comp-navigation (:logged-in? store) (:count store))
       (if (:logged-in? store)
         (case (:name router)
-          :home (comp-home)
+          :home (comp-home (:data router))
           :profile (comp-profile (:user store) (:data router))
+          :reading (comp-reading-room (:book (:data router)) (:reading (:data router)))
           (<> router))
         (comp-login states))
       (comp-status-color (:color store))

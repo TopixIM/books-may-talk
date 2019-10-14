@@ -3,6 +3,7 @@
   (:require [app.updater.session :as session]
             [app.updater.user :as user]
             [app.updater.router :as router]
+            [app.updater.reading :as reading]
             [app.schema :as schema]
             [respo-message.updater :refer [update-messages]]))
 
@@ -15,5 +16,6 @@
             :user/sign-up user/sign-up
             :user/log-out user/log-out
             :router/change router/change
+            :reading/start reading/touch-book
             (do (println "Unknown op:" op) identity))]
     (f db op-data sid op-id op-time)))
