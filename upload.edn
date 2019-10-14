@@ -1,0 +1,8 @@
+
+{:host "tiye.me"
+ :uploads [{:from "dist/*"
+            :to "cdn/books-may-talk/"}
+           {:from "dist/{index.html,manifest.json}"
+            :to "repo/TopixIM/books-may-talk/"}
+           {:from "dist/{server.js,package.json}"
+            :to "servers/books-may-talk/"}]}

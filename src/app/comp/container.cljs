@@ -12,7 +12,8 @@
             [cumulo-reel.comp.reel :refer [comp-reel]]
             [app.config :refer [dev?]]
             [app.schema :as schema]
-            [app.config :as config]))
+            [app.config :as config]
+            [app.comp.home :refer [comp-home]]))
 
 (defcomp
  comp-offline
@@ -63,7 +64,7 @@
       (comp-navigation (:logged-in? store) (:count store))
       (if (:logged-in? store)
         (case (:name router)
-          :home (<> "Nothing")
+          :home (comp-home)
           :profile (comp-profile (:user store) (:data router))
           (<> router))
         (comp-login states))
@@ -74,5 +75,3 @@
        {}
        (fn [info d! m!] (d! :session/remove-message info)))
       (when dev? (comp-reel (:reel-length store) {}))))))
-
-(def style-body {:padding "8px 16px"})
