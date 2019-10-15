@@ -11,23 +11,31 @@
       (map (fn [[k session]] [k (get-in users [(:user-id session) :name])]))
       (into {})))
 
+(deftwig twig-reading-room (reading) reading)
+
 (deftwig
  twig-container
  (db session records)
  (let [logged-in? (some? (:user-id session))
        router (:router session)
-       base-data {:logged-in? logged-in?, :session session, :reel-length (count records)}]
+       base-data {:logged-in? logged-in?, :session session, :reel-length (count records)}
+       books (:books db)]
    (merge
     base-data
     (if logged-in?
-      {:user (twig-user (get-in db [:users (:user-id session)])),
-       :router (assoc
-                router
-                :data
-                (case (:name router)
-                  :home (:pages db)
-                  :profile (twig-members (:sessions db) (:users db))
-                  {})),
-       :count (count (:sessions db)),
-       :color (color/randomColor)}
+      (let [user (get-in db [:users (:user-id session)])]
+        {:user (twig-user user),
+         :router (assoc
+                  router
+                  :data
+                  (case (:name router)
+                    :home (:books db)
+                    :profile (twig-members (:sessions db) (:users db))
+                    :reading
+                      (let [book-id (:data router)]
+                        {:book (get books book-id),
+                         :reading (twig-reading-room (get (:readings user) book-id))})
+                    {})),
+         :count (count (:sessions db)),
+         :color (color/randomColor)})
       nil))))
