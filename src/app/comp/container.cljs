@@ -67,7 +67,13 @@
         (case (:name router)
           :home (comp-home (:data router))
           :profile (comp-profile (:user store) (:data router))
-          :reading (comp-reading-room (:book (:data router)) (:reading (:data router)))
+          :reading
+            (cursor->
+             :reading
+             comp-reading-room
+             states
+             (:book (:data router))
+             (:reading (:data router)))
           (<> router))
         (comp-login states))
       (comp-status-color (:color store))

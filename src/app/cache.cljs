@@ -1,5 +1,5 @@
 
-(ns app.cache (:require ["path" :as path] ["fs" :as fs]))
+(ns app.cache (:require ["path" :as path] ["fs" :as fs] [clojure.string :as string]))
 
 (def books-cache
   {"cicero" (string/split

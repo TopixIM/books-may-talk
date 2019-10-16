@@ -17,5 +17,7 @@
             :user/log-out user/log-out
             :router/change router/change
             :reading/start reading/touch-book
+            :reading/next reading/read-next
+            :reading/note reading/add-note
             (do (println "Unknown op:" op) identity))]
     (f db op-data sid op-id op-time)))
