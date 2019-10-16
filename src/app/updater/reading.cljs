@@ -53,7 +53,20 @@
                    :time op-time,
                    :id op-id,
                    :book-index (:progress reading)})))))
-         (do (println "Already finished book") reading))))))
+         (-> reading
+             (update
+              :messages
+              (fn [messages]
+                (assoc
+                 messages
+                 op-id
+                 (merge
+                  schema/message
+                  {:kind :hint,
+                   :text "Fin.",
+                   :time op-time,
+                   :id op-id,
+                   :book-index (:progress reading)}))))))))))
 
 (defn touch-book [db op-data sid op-id op-time]
   (let [book-id op-data, user-id (get-in db [:sessions sid :user-id])]
