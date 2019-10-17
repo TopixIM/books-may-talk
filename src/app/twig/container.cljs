@@ -11,7 +11,14 @@
       (map (fn [[k session]] [k (get-in users [(:user-id session) :name])]))
       (into {})))
 
-(deftwig twig-reading-room (reading) reading)
+(deftwig
+ twig-reading-room
+ (reading)
+ (update
+  reading
+  :messages
+  (fn [messages]
+    (->> messages (sort-by (fn [[k message]] (:time message))) (take-last 20) (into {})))))
 
 (deftwig
  twig-container

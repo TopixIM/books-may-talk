@@ -10,7 +10,15 @@
             [respo.util.list :refer [map-val]]
             ["dayjs" :as dayjs]
             [respo-alerts.comp.alerts :refer [comp-prompt]]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [cumulo-util.core :refer [delay!]]))
+
+(defn try-to-scroll! []
+  (let [target (js/document.querySelector "#reading-room")]
+    (if (some? target)
+      (delay!
+       0.28
+       (fn [] (.scroll target (clj->js {:top (.-scrollHeight target), :behavior "smooth"})))))))
 
 (defcomp
  comp-reading-room
@@ -29,7 +37,12 @@
    (div
     {:style (merge ui/expand ui/column {})}
     (list->
-     {:style (merge ui/expand {:background-color (hsl 0 0 92), :padding "100px 16px 160px"})}
+     {:style (merge
+              ui/expand
+              {:background-color (hsl 0 0 92),
+               :padding "100px 16px 120px",
+               :scroll-behavior :smooth}),
+      :id "reading-room"}
      (->> (:messages reading)
           (sort-by (fn [[k message]] (:time message)))
           (map
@@ -40,7 +53,7 @@
                  {:style {:margin-bottom 12}}
                  (div
                   {}
-                  (<> "BOOK" {:color (hsl 0 0 60)})
+                  (<> (or (:author book) "BOOK") {:color (hsl 0 0 60)})
                   (=< 8 nil)
                   (<>
                    (-> (:time message) (dayjs) (.format "MM-DD HH:mm"))
@@ -54,7 +67,16 @@
                   (<> (:text message))))
                 (div
                  {:style ui/column}
-                 (div {:style ui/row-parted} (span nil) (<> "Me"))
+                 (div
+                  {:style ui/row-parted}
+                  (span nil)
+                  (div
+                   {}
+                   (<> "Me")
+                   (=< 8 nil)
+                   (<>
+                    (-> (:time message) (dayjs) (.format "MM-DD HH:mm"))
+                    {:font-size 12, :color (hsl 0 0 70)})))
                  (div
                   {:style ui/row-parted}
                   (span nil)
@@ -67,19 +89,25 @@
                    (<> (:text message))))))]))))
     (div
      {:style (merge
-              ui/row-center
+              ui/row-parted
               {:padding "16px", :border-top (str "1px solid " (hsl 0 0 90))})}
-     (button
-      {:style ui/button,
-       :inner-text "Next",
-       :on-click (fn [e d! m!] (d! :reading/next (:id book)))})
-     (=< 8 nil)
-     (cursor->
-      :note
-      comp-prompt
-      states
-      {:trigger (button {:style ui/button, :inner-text "Add note"}),
-       :multiline? true,
-       :button-text "Add note",
-       :validator (fn [x] (if (string/blank? x) "Need content" nil))}
-      (fn [result d! m!] (d! :reading/note {:book-id (:id book), :text result})))))))
+     (span {} (<> (:progress reading)))
+     (div
+      {}
+      (button
+       {:style ui/button,
+        :inner-text "Next",
+        :on-click (fn [e d! m!] (d! :reading/next (:id book)) (try-to-scroll!))})
+      (=< 8 nil)
+      (cursor->
+       :note
+       comp-prompt
+       states
+       {:trigger (button {:style ui/button, :inner-text "Add note"}),
+        :multiline? true,
+        :button-text "Add note",
+        :validator (fn [x] (if (string/blank? x) "Need content" nil))}
+       (fn [result d! m!]
+         (d! :reading/note {:book-id (:id book), :text result})
+         (try-to-scroll!))))
+     (span {})))))

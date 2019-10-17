@@ -25,4 +25,4 @@
 (def database
   {:sessions (do session {}),
    :users (do user {}),
-   :books {"cicero" {:id "cicero", :title "理性、美德和灵魂的声音"}}})
+   :books {"cicero" {:id "cicero", :title "理性、美德和灵魂的声音", :author "西塞罗"}}})
